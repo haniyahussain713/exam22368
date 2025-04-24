@@ -15,17 +15,22 @@ app.get('/', (req, res) => {
     res.render('index', { countries: null });
 });
 
-// Route to fetch countries from the API
 app.get('/countries', async (req, res) => {
     try {
         const response = await axios.get('https://restcountries.com/v3.1/all');
-        const countries = response.data;
+        const allCountries = response.data;
+
+        // Shuffle and pick 3
+        const shuffled = allCountries.sort(() => 0.5 - Math.random());
+        const countries = shuffled.slice(0, 3);
+
         res.render('index', { countries });
     } catch (error) {
         console.error('Error fetching countries:', error);
         res.render('index', { countries: [] });
     }
 });
+
 
 // Start the server
 app.listen(8080, () => {
